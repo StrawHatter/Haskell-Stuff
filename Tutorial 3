@@ -1,0 +1,200 @@
+-- Informatics 1 - Functional Programming 
+-- Tutorial 3
+--
+-- Week 5 - Due: 17/18 Oct.
+
+import Data.Char
+import Data.List
+import Test.QuickCheck
+
+
+
+-- 1. Map
+-- a.
+uppers :: String -> String
+uppers xs =  map toUpper xs
+
+-- b.
+doubles :: [Int] -> [Int]
+doubles xs = map (*2) xs
+
+-- c.        
+discount :: Int -> Float
+discount x = (fromIntegral x) / 100
+
+penceToPounds :: [Int] -> [Float]
+penceToPounds xs = map discount xs
+
+-- d.
+uppers' :: String -> String
+uppers' xs = [toUpper x | x <- xs]
+
+prop_uppers :: String -> Bool
+prop_uppers xs = uppers xs == uppers' xs
+
+
+
+-- 2. Filter
+-- a.
+alphas :: String -> String
+alphas xs = filter isAlpha xs
+
+-- b.
+rmChar ::  Char -> String -> String
+rmChar ch xs = filter others xs
+    where others x = x /= ch
+{-
+filters the results of the function others and 
+checks with the inputted char. 
+Inputted char is compared with the first letter
+If it is = to it, it drops it. if not, continues.
+-}
+
+-- c.
+above :: Int -> [Int] -> [Int]
+above i xs = filter othernum xs
+    where othernum x = x > i
+
+-- d.
+unequals :: [(Int,Int)] -> [(Int,Int)]
+unequals xys = filter unequalling xys
+    where unequalling (x,y) = x /= y
+
+-- e.
+rmCharComp :: Char -> String -> String
+rmCharComp ch xs = [x | x <- xs, x /= ch]
+
+prop_rmChar :: Char -> String -> Bool
+prop_rmChar ch xs = rmChar ch xs == rmCharComp ch xs
+
+
+
+-- 3. Comprehensions vs. map & filter
+-- a.
+upperChars :: String -> String
+upperChars s = [toUpper c | c <- s, isAlpha c]
+
+upperChars' :: String -> String
+upperChars' s = map toUpper (filter isAlpha s)
+
+prop_upperChars :: String -> Bool
+prop_upperChars s = upperChars s == upperChars' s
+
+-- b.
+largeDoubles :: [Int] -> [Int]
+largeDoubles xs = [2 * x | x <- xs, x > 3]
+
+largeDoubles' :: [Int] -> [Int]
+largeDoubles' xs = map (*2) (filter (>3) xs)
+
+prop_largeDoubles :: [Int] -> Bool
+prop_largeDoubles xs = largeDoubles xs == largeDoubles' xs 
+
+-- c.
+reverseEven :: [String] -> [String]
+reverseEven strs = [reverse s | s <- strs, even (length s)]
+
+reverseEven' :: [String] -> [String]
+reverseEven' strs = map reverse (filter evLen strs)
+    where evLen s = even (length s)
+	
+prop_reverseEven :: [String] -> Bool
+prop_reverseEven strs = reverseEven strs == reverseEven' strs
+
+
+
+-- 4. Foldr
+-- a.
+productRec :: [Int] -> Int
+productRec []     = 1
+productRec (x:xs) = x * productRec xs
+
+productFold :: [Int] -> Int
+productFold xs = foldr (*) 1 xs
+
+prop_product :: [Int] -> Bool
+prop_product xs = productRec xs == productFold xs
+
+-- b.
+andRec :: [Bool] -> Bool
+andRec [] = True
+andRec (x:xs) = x && andRec xs
+
+andFold :: [Bool] -> Bool
+andFold xs = foldr (&&) True xs
+
+prop_and :: [Bool] -> Bool
+prop_and xs = andRec xs == andFold xs 
+
+-- c.
+concatRec :: [[a]] -> [a]
+concatRec [] = [] 
+concatRec (s:strs) = s ++ concatRec strs
+
+concatFold :: [[a]] -> [a]
+concatFold strs = foldr (++) [] strs
+
+prop_concat :: [String] -> Bool
+prop_concat strs = concatRec strs == concatFold strs
+
+-- d.
+rmCharsRec :: String -> String -> String
+rmCharsRec [] inputstr = []
+rmCharsRec (c:chars) str = rmChar c (rmChar c str)
+
+rmCharsFold :: String -> String -> String
+rmCharsFold chars str = foldr rmChar str chars
+
+prop_rmChars :: String -> String -> Bool
+prop_rmChars chars str = rmCharsRec chars str == rmCharsFold chars str
+
+
+type Matrix = [[Int]]
+
+
+-- 5
+-- a.
+uniform :: [Int] -> Bool
+uniform [] = True
+uniform xs = all (==head xs) (tail xs)
+
+-- b.
+valid :: Matrix -> Bool
+valid []     = False
+valid (x:xs) = length x > 0 && uniform (map length (x:xs))
+
+-- 6.
+zipWithComp :: (a -> b -> c) -> [a] -> [b] -> [c]
+zipWithComp f xs ys = [f x y | (x,y) <- zip xs ys]
+
+zipWithOwn ::(a -> b -> c) -> [a] -> [b] -> [c]
+zipWithOwn f xs ys = map (uncurry f) (zip xs ys) 
+
+-- 7.
+checkingSize :: Matrix -> Int
+checkingSize xs = length (head xs)
+
+checkingWidth :: Matrix -> Int
+checkingWidth xs = length xs
+
+{-
+checking :: Matrix -> Matrix -> (Matrix -> Matrix -> Matrix)
+checking xs ys = if
+                checkingSize xs == checkingSize ys && checkingWidth xs == checkingWidth ys then 
+		    	plusM
+		   else 
+    			error "Unsuitable Input"
+-}
+				
+plusM :: Matrix -> Matrix -> Matrix
+plusM [] _ = error "Unsuitable Input"
+plusM _ [] = error "Unsuitable Input"
+plusM xs ys | checking = zipWith (zipWith(+)) xs ys
+    where checking = checkingSize xs == checkingSize ys && checkingWidth xs == checkingWidth ys
+
+-- 8.
+timesM :: Matrix -> Matrix -> Matrix
+timesM xs ys = undefined
+
+-- Optional material
+-- 9.
