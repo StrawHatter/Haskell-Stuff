@@ -21,3 +21,26 @@ ffoldmapfilt :: String -> Bool                                     -- Applies fu
 ffoldmapfilt str = foldr (&&) True (map isRoyal (filter isNumero str)) -- to the map of isRoyal of the list, filtered by
                                                                    -- isNumero.
 
+wombocombo :: [a] -> [a]
+wombocombo xs = concat [if even i then [x,x] else [x] | (x,i) <- zip xs [1..]] 
+
+{-
+if statement whitin a ListComp that checks if a variable i, which will be acting as a counter of sorts in this function
+then it will take the first element of xs and replicate it in a list, if it is odd, it will stay the same and be added
+to the list.
+-}
+
+-- combo :: [a] -> [a]   -- No idea what the fuck I'm doing
+-- combo [] = []
+-- combo (x:xs)
+--    | even i = [x,x]
+--    | otherwise = [x]
+
+isNNF :: Proposition -> Bool
+isNNF (p :&: q)      =  isNNF p && isNNF q
+isNNF (p :|: q)      =  isNNF p && isNNF q
+isNNF (Not (Var _))  =  True
+isNNF (Var _)        =  True
+isNNF T              =  True
+isNNF F              =  True
+isNNF _              =  False
