@@ -1,0 +1,23 @@
+import Data.Char
+import Data.List
+import Control.Monad
+import Test.QuickCheck
+
+isRoyal :: Char -> Bool                                            -- Checks to see if element x is a "facecard"
+isRoyal x = x == 'A' || x == 'K' || x == 'Q' || x == 'J'
+
+isNumero :: Char -> Bool                                           -- Checks if it is a Number AND not 1
+isNumero x = isRoyal x || (isDigit x && x /= '1')
+
+f :: String -> Bool
+f str = and [isRoyal c | c <- str, isNumero c]                     -- Apply function IsRoyal to c which is taken from list
+                                                                   -- xs and then filter using IsNumero to said element.
+frecurs :: String -> Bool
+frecurs (c:str)                                                    -- First filters using isNumero and then if so, then 
+    | isNumero c = isRoyal c && frecurs str                        -- apply isRoyal to c etc etc if not then just go apply 
+    | otherwise  = frecurs str                                     -- frecurs again.
+
+ffoldmapfilt :: String -> Bool                                     -- Applies function "&&" and makes sure it is true
+ffoldmapfilt str = foldr (&&) True (map isRoyal (filter isNumero str)) -- to the map of isRoyal of the list, filtered by
+                                                                   -- isNumero.
+
