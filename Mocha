@@ -36,11 +36,11 @@ to the list.
 --    | even i = [x,x]
 --    | otherwise = [x]
 
-isNNF :: Proposition -> Bool
-isNNF (p :&: q)      =  isNNF p && isNNF q
-isNNF (p :|: q)      =  isNNF p && isNNF q
-isNNF (Not (Var _))  =  True
-isNNF (Var _)        =  True
-isNNF T              =  True
-isNNF F              =  True
-isNNF _              =  False
+-- isNNF :: Proposition -> Bool
+-- isNNF (p :&: q)      =  isNNF p && isNNF q
+-- isNNF (p :|: q)      =  isNNF p && isNNF q
+-- isNNF (Not (Var _))  =  True
+-- isNNF (Var _)        =  True
+-- isNNF T              =  True
+-- isNNF F              =  True
+-- isNNF _              =  False
