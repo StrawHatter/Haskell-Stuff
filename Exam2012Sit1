@@ -1,0 +1,19 @@
+
+frec :: Int -> [Int] -> [Int]
+frec i [] = []
+frec i [x] = [i]
+frec i (_:x:xs) = i : x : frec i xs
+
+p :: [Int] -> Bool
+p xs = and [even x | x <- xs, x >= 10 && x <= 100]
+
+prec :: [Int] -> Bool
+prec (x:xs)
+   | x >= 10 && x <= 100 && even x = True
+   | otherwise                     = False
+
+myDomain :: Int -> Bool
+myDomain x = 10 <= x && x <= 100
+
+phigher :: [Int] -> Bool
+phigher xs = foldr (&&) True (map even (filter myDoman xs))
