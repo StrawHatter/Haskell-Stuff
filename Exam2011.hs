@@ -8,3 +8,6 @@ frecu (x:xs)
     | otherwise = frecu xs
 
 
+p :: [Int] -> [Int]
+p xs | even (length xs)
+    = sum [ xs!!(i+1) * xs!!i | i <- [0..length xs-1], even i]
