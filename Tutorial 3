@@ -1,0 +1,113 @@
+-- Informatics 1 - Functional Programming 
+-- Tutorial 3
+--
+-- Week 5 - Due: 16/17 Oct.
+
+import Data.Char
+import Test.QuickCheck
+
+
+
+-- 1. Map
+-- a.
+uppers :: String -> String
+uppers xs = map toUpper xs
+
+-- b.
+doubles :: [Int] -> [Int]
+doubles xs = map dubs xs
+
+dubs x = x + x
+-- c.        
+penceToPounds :: [Int] -> [Float]
+penceToPounds xs = map takes xs
+
+takes x = ((fromIntegral x) / 100)
+-- d.
+uppers' :: String -> String
+uppers' xs = [toUpper x | x <- xs]
+
+prop_uppers :: String -> Bool
+prop_uppers xs = uppers' xs == uppers xs
+
+
+
+-- 2. Filter
+-- a.
+alphas :: String -> String
+alphas xs = filter isAlpha xs
+
+-- b.
+rmChar ::  Char -> String -> String
+rmChar chra xs = filter (/= chra) xs
+
+-- c.
+above :: Int -> [Int] -> [Int]
+above i xs = filter (\x -> x >= i) xs
+
+above2 :: Int -> [Int] -> [Int]
+above2 i xs = filter (abvs i) xs
+    where
+        abvs i x = i <= x
+
+above3 :: Int -> [Int] -> [Int]
+above3 i xs = filter (>= i) xs
+
+prop_above :: Int -> [Int] -> Bool
+prop_above i xs = above i xs == above2 i xs
+
+prop_above2 :: Int -> [Int] -> Bool
+prop_above2 i xs = above i xs == above3 i xs
+
+-- d.
+unequals :: [(Int,Int)] -> [(Int,Int)]
+unequals xs = filter unequality xs
+    where
+        unequality xs
+            | fst xs == snd xs = False
+            | otherwise = True
+
+-- e.
+rmCharComp :: Char -> String -> String
+rmCharComp chra xs = [x | x <- xs, x /= chra]
+
+prop_rmChar :: Char -> String -> Bool
+prop_rmChar chra xs = rmCharComp chra xs == rmChar chra xs
+
+
+
+-- 3. Comprehensions vs. map & filter
+-- a.
+upperChars :: String -> String
+upperChars s = [toUpper c | c <- s, isAlpha c]
+
+upperChars' :: String -> String
+upperChars' xs = (map toUpper (filter isAlpha xs))
+
+prop_upperChars :: String -> Bool
+prop_upperChars s = upperChars s == upperChars' s
+
+-- b.
+largeDoubles :: [Int] -> [Int]
+largeDoubles xs = [2 * x | x <- xs, x > 3]
+
+largeDoubles' :: [Int] -> [Int]
+largeDoubles' xs = map dubbs (filter (>3) xs)
+    where
+        dubbs x = x + x
+
+prop_largeDoubles :: [Int] -> Bool
+prop_largeDoubles xs = largeDoubles xs == largeDoubles' xs
+
+-- c.
+reverseEven :: [String] -> [String]
+reverseEven strs = [reverse s | s <- strs, even (length s)]
+
+reverseEven' :: [String] -> [String]
+reverseEven' xs = map reverse ( filter condition xs)
+    where
+        condition xs = even (length xs)
+
+prop_reverseEven :: [String] -> Bool
+prop_reverseEven strs = reverseEven strs == reverseEven' strs
+
