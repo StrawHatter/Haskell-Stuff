@@ -111,3 +111,48 @@ reverseEven' xs = map reverse ( filter condition xs)
 prop_reverseEven :: [String] -> Bool
 prop_reverseEven strs = reverseEven strs == reverseEven' strs
 
+
+-- 4. Foldr
+-- a.
+productRec :: [Int] -> Int
+productRec []     = 1
+productRec (x:xs) = x * productRec xs
+
+productFold :: [Int] -> Int
+productFold xs = foldr (*) 1 xs
+
+prop_product :: [Int] -> Bool
+prop_product xs = productRec xs == productFold xs
+
+-- b.
+andRec :: [Bool] -> Bool
+andRec [] = True
+andRec (x:xs) = x && andRec xs
+
+andFold :: [Bool] -> Bool
+andFold xs = foldr (&&) True xs
+
+prop_and :: [Bool] -> Bool
+prop_and xs = andRec xs == andFold xs
+
+-- c.
+concatRec :: [[a]] -> [a]
+concatRec [] = []
+concatRec (xs:xss) = xs ++ concatRec xss
+
+concatFold :: [[a]] -> [a]
+concatFold xs = foldr (++) [] xs
+
+prop_concat :: [String] -> Bool
+prop_concat strs = concatRec strs == concatFold strs
+
+-- d.
+rmCharsRec :: [Char] -> String -> String
+rmCharsRec [] xs = xs
+rmCharsRec (n:ns) xs = ns `rmCharsRec` (rmChar n xs)
+
+rmCharsFold :: [Char] -> [Char] -> String
+rmCharsFold chars str = foldr (rmChar) str chars
+
+prop_rmChars :: [Char] -> String -> Bool
+prop_rmChars chars str = rmCharsRec chars str == rmCharsFold chars str
