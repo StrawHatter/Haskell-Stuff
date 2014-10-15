@@ -156,3 +156,9 @@ rmCharsFold chars str = foldr (rmChar) str chars
 
 prop_rmChars :: [Char] -> String -> Bool
 prop_rmChars chars str = rmCharsRec chars str == rmCharsFold chars str
+
+-- 5
+-- a.
+uniform :: [Int] -> Bool
+uniform [] = True
+uniform xs = all (== head xs) (tail xs)
