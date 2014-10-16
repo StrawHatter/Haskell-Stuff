@@ -162,3 +162,9 @@ prop_rmChars chars str = rmCharsRec chars str == rmCharsFold chars str
 uniform :: [Int] -> Bool
 uniform [] = True
 uniform xs = all (== head xs) (tail xs)
+
+all2 :: (a -> Bool) -> [a] -> Bool
+all2 f xs = foldr (&&) True (map f xs)
+
+prop_all :: [Int] -> Bool
+prop_all xs = all even xs == all2 even xs
