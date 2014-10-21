@@ -1,0 +1,21 @@
+import Data.List
+import Data.Char
+import Test.QuickCheck
+
+
+f :: Char -> Bool
+f x | x == 'g' = True
+    | x == 'j' = True
+    | x == 'p' = True
+    | x == 'q' = True
+    | otherwise = False
+    
+g :: Stirng -> Int
+g xs = length [x | x <- xs, f x]
+
+h :: String -> Int
+h [] = 0
+h (x:xs) 
+    | f x = 1 + h xs
+    | otherwise = h xs
+    
