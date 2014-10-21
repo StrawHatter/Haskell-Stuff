@@ -20,3 +20,12 @@ h (x:xs)
     | f x = 1 + h xs
     | otherwise = h xs
     
+c :: String -> String
+c xs = [if even y then toUpper x else x | (x,y) <- zip xs [0..] ]
+
+b :: String -> String
+b [] = []
+b (x:y:z) = toUpper x : y : b z
+
+prop_cb :: String -> Bool
+prop_cb xs = c xs == b xs
