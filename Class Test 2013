@@ -1,0 +1,21 @@
+import Data.Char
+import Data.List
+import Test.QuickCheck
+
+f :: Char -> Int
+f x | isAlpha x && elem x "haskell" && isLower x = 5
+    | isAlpha x && elem x "HASKELL" && isUpper x = 10
+    | isAlpha x && isLower x = 1
+    | isAlpha x && isUpper x = 2
+    | otherwise = 0
+
+g :: String -> Int
+g xs = product [ f x | x <- xs, isAlpha x]
+
+
+~                                                                       
+~                                                                       
+~                                                                       
+~                                                                       
+~                                                                       
+~                   
