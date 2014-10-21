@@ -7,6 +7,7 @@ f :: Char -> Bool
 f x | x == 'g' = True
     | x == 'j' = True
     | x == 'p' = True
+    | x == 'y' = True
     | x == 'q' = True
     | otherwise = False
     
