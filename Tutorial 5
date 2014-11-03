@@ -38,9 +38,7 @@ isBloodOrange :: Fruit -> Bool
 isBloodOrange (Orange("Tarocco", _)) = True
 isBloodOrange (Orange("Moro", _)) = True
 isBloodOrange (Orange("Sanguinello", _)) = True
-isBloodOrange (Orange(_, _)) = False
-isBloodOrange (Apple(_, _)) = False
-
+isBloodOrange _ = False
 
 -- 2.
 bloodOrangeSegments :: [Fruit] -> Int
@@ -58,6 +56,7 @@ worms fruits = length [fruit | fruit <- fruits, isWormy fruit]
 
 isWormy :: Fruit -> Bool
 isWormy (Apple(_, True)) = True
+isWormy _ = False
 
 -- Implementing propositional logic in Haskell
 -- The datatype 'Prop'
